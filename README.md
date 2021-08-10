@@ -1,51 +1,30 @@
-# 경비 로봇 프로젝트 aa
-자율주행차를 만들고 있습니다.
+# 협업프로젝트
+졸음운전 인식 후 (Sleeping-detect) 움직이는 차량(Scout-mini, 별도 레파지토리) 제어
 
-우분투 18.04 LTS, ROS melodic 버전, 파이썬 3.6
-
-<br/>
-
-대표 패키지들 소개   
-1. color_tracker, object_follower   
-2. sleeping_detect, roll-out-car
+**우분투 18.04 LTS, ROS melodic 버전, 파이썬 3.6**
 
 <br/>
 
-## color_tracker 패키지 
-카메라를 통해서 원 모양의 특정 색 (녹색)을 추적하는 프로그램 입니다. 특정 색을 추적하면서 ROS를 이용해서 퍼블리싱을 합니다.
-
-필요한 라이브러리 
-```
-python3 -m pip install imutils numpy rospkg PyYAML opencv-python
-```
-opencv를 못찾는 경우에는 pip을 업그레이드한다
-```
-pip3 install --upgrade pip
-```
-파이썬으로 되어 있으므로 카메라만 있다면 자체 실행 가능. 
-
-ROS의 노드로 동작하게 하려면 catkin_make를 하고, 실행가능하게 권한을 바꿔줍니다.
-```
-cd ~/catkin_ws
-catkin_make
-```
-그리고 나서 
-```
-cd src/patrol-robot/color_tracker/src
-sudo chmod +x color_tracking.py
-rospack profile
-```
-ROS 노드 실행
-```
-rosrun color_tracker color_tracking.py
-```
-
+# 패키지들 소개   
+1. sleeping_detect, roll-out-car
 
 <br/>
 
-## object_follower 
-color_tracker 패키지의 topic을 구독하여서 쫒아가는 프로그램 입니다. scout-mini 자동차에게 움직임을 
-퍼블리싱 합니다.
+## Ros환경에서 패키지 실행
+카메라를 통한 실시간 Object Detection을 통하여, 운전자의 상태를 졸음여부를 파악 후  
+
+(일정시간 눈 감음 지속, 해당 프로젝트에선 5초로 함)
+
+운전자에게 경고를 주며 ( Arduino LED, Serial통신 ) 차량을 멈추는 시스템
+
+<br/>
+
+## Ros Master를 통하여 운전석(PC)와 차량을 연결
+
+<br/>
+
+# 패키지들 소개   
+1. sleeping_detect, roll-out-car
 
 <br/>
 
@@ -53,36 +32,11 @@ color_tracker 패키지의 topic을 구독하여서 쫒아가는 프로그램 �
 졸음 디텍팅 프로그램 입니다. 카메라를 통해서 눈 깜빡임으로 졸음을 감지하며 눈을 오래 감고 있으면 
 아두이노로 경고 LED을 표시하고 ROS를 통해 졸음 신호를 퍼블리싱 합니다.
 
-필요한 라이브러리
-```
-python3 -m pip install torch pandas tqdm torchvision matplotlib seaborn searial
-```
-파이썬으로 되어 있으므로 카메라만 있다면 자체 실행 가능. 
-
-ROS의 노드로 동작하게 하려면 catkin_make를 하고, 파이썬 파일을 실행가능하게 권한을 바꿔주면 됩니다.
-```
-cd ~/catkin_ws
-catkin_make
-```
-그리고 나서 
-```
-cd src/patrol-robot/sleeping_detect/scripts/yolov5 
-sudo chmod +x detect.py
-rospack profile
-```
-ROS 노드 실행
-```
-rosrun sleeping_detect detect.py
-```
-
-
 <br/>
 
 ## roll-out-car
 slepping_detect 프로그램에서 보내온 topic을 받아서 scout-mini 자동차를 제어하는 프로그램 입니다.
 기본으로 사각형 모양으로 움직이다가 졸음 신호가 오면 자동차가 멈추게 됩니다.
-
-<br/>
 
 <br/>
 
